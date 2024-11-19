@@ -9,6 +9,7 @@ var nombreJugador1="";
 const socket = io();
 
 var objArdilla = new THREE.Object3D();
+var objArdilla2 = new THREE.Object3D();
 
 const manager = new THREE.LoadingManager();
 manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
@@ -81,7 +82,37 @@ function ModeloJugador1(pathModelo, name, posx, posy, posz, scale, angleY) {
     });
 }
 
+function ModeloJugador2(pathModelo, name, posx, posy, posz, scale, angleY) {
+
+    const loader = new OBJLoader(manager);
+    var mtl = new MTLLoader(manager);
+
+    mtl.load('http://localhost:3000/'+pathModelo+'.mtl', function (materials) {
+        materials.preload();
+        loader.setMaterials(materials);
+
+        loader.load('http://localhost:3000/'+pathModelo+'.obj',
+            function (object) {
+
+                objArdilla2 = object;
+                object.name = name;
+                object.position.x = posx;
+                object.position.y = posy;
+                object.position.z = posz;
+                object.scale.copy(new THREE.Vector3(scale, scale, scale));
+                if (angleY != null) {
+                    object.rotation.y = angleY * Math.PI / 180;
+                }
+                scene.add( object );
+        });
+
+        console.log(materials);
+    });
+}
+
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
+
+ModeloJugador2('models/ardilla2/ardilla', 'ardilla2', 0, 0, 5, 0.2, 180);
 
 Modelos3D('models/arbol/arbol', 'arbol', -5, -3, -9, 1);
 Modelos3D('models/banca/banca', 'banca', 5, -3, -9, 3);
@@ -109,13 +140,6 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( container.offsetWidth, container.offsetHeight );
 container.appendChild( renderer.domElement );
 
-//Cubo representando al segundo jugador --PRUEBA--
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material2 = new THREE.MeshPhongMaterial( { color: 0x00ffff} );
-const cube2 = new THREE.Mesh( geometry, material2 );
-cube2.position.z= -3;
-scene.add(cube2);
-
 //Plano que sera el terreno
 const loader = new THREE.TextureLoader();
 const grass_material = new THREE.MeshPhysicalMaterial({ map: loader.load('imgs/grass_2.png') });
@@ -128,9 +152,8 @@ scene.add( ground );
 const al = new THREE.AmbientLight( 0xffffff, 5 ); //Luz ambiental suave BLANCA
 scene.add( al );
 
-const dl = new THREE.DirectionalLight( 0xffffff, 1 ); //Luz direccional
-dl.position.set(0, 5, 0);
-scene.add( dl );
+const pl = new THREE.PointLight( 0xffffff, 10, 10,2); //Luz focal al jugador
+scene.add( pl);
 
 //Estos controles son para poder mirar alrededor, osea mover hacia donde esta viendo el jugador
 const pControls = new PointerLockControls(camera, document.body);
@@ -160,10 +183,12 @@ function animate() {
         }
         
         if(nombre == nombreJugador2){
-          cube2.position.set(position.x,position.y-3,position.z-5);
+          objArdilla2.position.set(position.x,position.y-3,position.z-5);
         }
         
     });
+
+    pl.position.set(objArdilla.x, objArdilla.y + 2, objArdilla.z);
 
     renderer.render( scene, camera );
 }
