@@ -1,0 +1,13 @@
+#title {
+    color: #fff;
+    font-size: 2.5rem;
+    text-shadow: 3px 3px #2E073F, -2px -0px #E2BFD9 ;
+    margin-top: 8vh;
+}
+
+#first-place {
+    background-color: #8f891d;
+    border-radius: 10px;
+    margin-left: 50rem;
+    padding-right: 50rem;
+}

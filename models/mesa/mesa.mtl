@@ -1,0 +1,27 @@
+# Blender MTL File: 'table.blend'
+# Material Count: 2
+
+newmtl Metal
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump plane_divided_DefaultMaterial_Normal.jpg
+map_Ns plane_divided_DefaultMaterial_Roughness.jpg
+
+newmtl Wood.002
+Ns 359.999993
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd woodcreator_1_basecolor.jpg
+map_Ns woodcreator_1_roughness.jpg
+refl woodcreator_1_metallic.jpg

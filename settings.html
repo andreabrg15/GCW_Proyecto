@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setttings</title>
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <main>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid d-flex justify-content-center align-items-center py-4">
+                <a class="navbarBrand " href="#">Ajustes</a>
+            </div>
+        </nav>
+        <!--Cuerpo-->
+        <div class="container-fluid">
+            <div class="row d-flex full-height">
+                <div class="col-8 settings-section">
+                    <!--Tutorial-->
+                    <!--Ajustes generales-->
+                    <!--Ajustes de video-->
+                    <!--Ajustes de sonido-->
+                    <div class="container p-2">
+                        <h1>Ajustes de sonido</h1>
+                        <div class="row p-2">
+                            <div class="slidecontainer">
+                                <p>General: <span id="id-general"></span></p>
+                                <input type="range" min="0" max="100" value="100" class="slider" id="id-range-general">
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="slidecontainer">
+                                <p>Musica: <span id="id-music"></span></p>
+                                <input type="range" min="0" max="100" value="100" class="slider" id="id-range-music">
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="slidecontainer">
+                                <p>Enemigos: <span id="id-enemys"></span></p>
+                                <input type="range" min="0" max="100" value="100" class="slider" id="id-range-enemys">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <!--Botones de seccion ajustes-->
+                    <div class="container p-2">
+                        <div class="row py-1">
+                            <button class="btnShadow p-4">Tutorial</button>                            
+                        </div>
+                        <div class="row py-1">
+                            <button class="btnShadow p-4">General</button>                            
+                        </div>
+                        <div class="row py-1">
+                            <button class="btnShadow p-4">Video</button>                            
+                        </div>
+                        <div class="row py-1">
+                            <button class="btnShadow p-4">Sonido</button>                            
+                        </div>
+                        <div class="row py-1">
+                            <button class="btnShadow p-4">Controles</button>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const sliders = [
+        { slider: "id-range-general", output: "id-general" },
+        { slider: "id-range-music", output: "id-music" },
+        { slider: "id-range-enemys", output: "id-enemys" }
+        ];
+
+        sliders.forEach(({ slider, output }) => {
+            const sliderElem = document.getElementById(slider);
+            const outputElem = document.getElementById(output);
+
+            // Mostrar valor inicial
+            outputElem.innerHTML = sliderElem.value;
+
+            // Actualizar valor en cada input
+            sliderElem.oninput = function () {
+                outputElem.innerHTML = this.value;
+                this.style.setProperty('--value', this.value + '%');
+            };
+
+            // Inicializar el color del camino recorrido
+            sliderElem.dispatchEvent(new Event('input'));
+        });
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

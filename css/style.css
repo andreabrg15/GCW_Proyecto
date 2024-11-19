@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+#id-start-game
+{
+    text-decoration: none;
+    color: inherit;
+}
+/* Estilo para cubrir el fondo del menu inicial con la imagen del logo y el diseño hecho*/
+#home {
+    background: url('../imgs/inicio.png') no-repeat center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: grid;
+    min-height: 100vh;
+}
+
+/* Estilo para el boton de 'Iniciar partida' */
+
+#start-btn {
+    background-image: url('../imgs/boton.png');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 461px;
+    height: 102px;
+    color: #fff;
+    font-size: 25px;
+    justify-self: center;
+    position: absolute;
+    top: 65vh;
+}
+
+#start-btn:hover {
+    cursor: pointer;
+    scale: 1.05;
+    transition: ease-in-out;
+}
+
+#start-btn:active {
+    scale: 0.9;
+    transition: ease-in-out;
+}
+
+/* Seccion para que los otros botones esten alineados */
+#secondary-btns {
+    display: flex;
+    justify-self: center;
+    position: absolute;
+    top: 80vh;
+}
+
+#secondary-btns div {
+    background-image: url('../imgs/boton.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+}
+
+#secondary-btns div:hover {
+    cursor: pointer;
+    scale: 1.1;
+    transition: ease-in-out;
+}
+
+#secondary-btns div:active {
+    scale: 0.9;
+    transition: ease-in-out;
+}
+
+#config-btn {
+    margin-right: 25px;
+}
+
+#config-btn img, #scores-btn img, #user-btn img {
+    width: 50%;
+}
+
+#scores-btn {
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+#user-btn {
+    margin-left: 25px;
+}
