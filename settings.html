@@ -71,28 +71,7 @@
         </div>
     </main>
     <script>
-        const sliders = [
-        { slider: "id-range-general", output: "id-general" },
-        { slider: "id-range-music", output: "id-music" },
-        { slider: "id-range-enemys", output: "id-enemys" }
-        ];
-
-        sliders.forEach(({ slider, output }) => {
-            const sliderElem = document.getElementById(slider);
-            const outputElem = document.getElementById(output);
-
-            // Mostrar valor inicial
-            outputElem.innerHTML = sliderElem.value;
-
-            // Actualizar valor en cada input
-            sliderElem.oninput = function () {
-                outputElem.innerHTML = this.value;
-                this.style.setProperty('--value', this.value + '%');
-            };
-
-            // Inicializar el color del camino recorrido
-            sliderElem.dispatchEvent(new Event('input'));
-        });
+        
 
 
     </script>

@@ -131,7 +131,8 @@ Modelos3D('models/wall/wall', 'wall4', -12, -3, 0, 2);
 
 
 
-
+var generalVolume = 100.0;
+var musicVolume = 100.0;
 const scene = new THREE.Scene();
 
 //Estas dos lineas de abajo son para que la escena cargue dentro del div elegido
@@ -233,9 +234,46 @@ function isWallColliding(point, cube)
 }
 
 $(document).ready(function() {
+    const sliders = [
+        { slider: "id-range-general", output: "id-general" },
+        { slider: "id-range-music", output: "id-music" },
+        { slider: "id-range-enemys", output: "id-enemys" }
+        ];
+
+        sliders.forEach(({ slider, output }) => {
+            const sliderElem = document.getElementById(slider);
+            const outputElem = document.getElementById(output);
+
+            // Mostrar valor inicial
+            outputElem.innerHTML = sliderElem.value;
+
+            // Actualizar valor en cada input
+            sliderElem.oninput = function () {
+                if(slider === "id-range-general")
+                {
+                    generalVolume = parseFloat(this.value) / 100;
+                }
+                if(slider === "id-range-music")
+                {
+                    musicVolume = parseFloat(this.value) / 100;
+                }
+                outputElem.innerHTML = this.value;
+                this.style.setProperty('--value', this.value + '%');
+                audio.volume = (1.0 * musicVolume) * generalVolume;
+            };
+
+            // Inicializar el color del camino recorrido
+            sliderElem.dispatchEvent(new Event('input'));
+        });
+
 
     $("#idBoton").click(iniciarConexion);
-
+    const audio = new Audio('loop.ogg');
+    audio.volume = 1.0; // Volumen entre 0.0 y 1.0
+    audio.loop = true; // Repetir sonido
+    audio.play()
+            .then(() => console.log("Reproduciendo..."))
+            .catch(err => console.error("Error al reproducir:", err));
     //Tengo que checar porque al conectar en tiempo real a ambos jugadores, todo se vuelve tan lento
     $(document).keypress(function(e){
 
@@ -246,7 +284,7 @@ $(document).ready(function() {
             const point = { x: camera.position.x, y: camera.position.y, z: camera.position.z }; // Coordenadas del punto
             const cube = { x: -2.5, y: -3, z: 30, width: 5, height: 5, depth: 25};
             if (isWallColliding(point, cube)) {
-                console.log("El punto choca con el cubo. Px:" + point.x + " Pz: " + point.z);
+                //console.log("El punto choca con el cubo. Px:" + point.x + " Pz: " + point.z);
             }
         //
 
