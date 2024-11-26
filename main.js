@@ -110,23 +110,34 @@ function ModeloJugador2(pathModelo, name, posx, posy, posz, scale, angleY) {
     });
 }
 
+
+
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
 
 ModeloJugador2('models/ardilla2/ardilla', 'ardilla2', 0, 0, 5, 0.2, 180);
 
-Modelos3D('models/arbol/arbol', 'arbol', -5, -3, -9, 1);
-Modelos3D('models/banca/banca', 'banca', 5, -3, -9, 3);
-Modelos3D('models/roca/roca', 'roca', -10.5, -3, -9, 2);
-Modelos3D('models/arbolito/arbolito', 'arbolito', -17, -3, -9, 4);
-Modelos3D('models/columpios/columpios', 'columpios', 16, -3, -9, 0.8);
-Modelos3D('models/bellota/bellota', 'bellota', 26, -3, -9, 1);
-Modelos3D('models/mesa/mesa', 'mesa', 35, -3, -9, 2, 90);
+Modelos3D('models/1st/1st', '1st', 25, -3, 25, 2);
+Modelos3D('models/2nd/2nd', '2nd', -25, -3, 25, 2);
+Modelos3D('models/3rd/3rd', '3rd', -25, -3, -25, 2);
+Modelos3D('models/4th/4th', '4rd', 25, -3, -25, 2);
+Modelos3D('models/wall/wall', 'wall1', 0, -3, 40, 2, 90);
+Modelos3D('models/wall/wall', 'wall2', 0, -3, 12, 2, 90);
+Modelos3D('models/wall/wall', 'wall3', 40, -3, 0, 2);
+Modelos3D('models/wall/wall', 'wall4', 12, -3, 0, 2);
+Modelos3D('models/wall/wall', 'wall1', 0, -3, -40, 2, 90);
+Modelos3D('models/wall/wall', 'wall2', 0, -3, -12, 2, 90);
+Modelos3D('models/wall/wall', 'wall3', -40, -3, 0, 2);
+Modelos3D('models/wall/wall', 'wall4', -12, -3, 0, 2);
 
+
+
+var generalVolume = 100.0;
+var musicVolume = 100.0;
 const scene = new THREE.Scene();
 
 //Estas dos lineas de abajo son para que la escena cargue dentro del div elegido
 const container = document.getElementById("game");
-const camera = new THREE.PerspectiveCamera( 75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera( 60, container.offsetWidth / container.offsetHeight, 0.1, 2000);
 
 //Similar a un cubemap o skybox, carga las texturas del fondo
 const backColor = new THREE.CubeTextureLoader().setPath("imgs/").load( [
@@ -149,7 +160,7 @@ ground.position.y = -3;
 ground.visible = true;
 scene.add( ground );
 
-const al = new THREE.AmbientLight( 0xffffff, 5 ); //Luz ambiental suave BLANCA
+const al = new THREE.AmbientLight( 0xffffff, 2 ); //Luz ambiental suave BLANCA
 scene.add( al );
 
 const pl = new THREE.PointLight( 0xffffff, 10, 10,2); //Luz focal al jugador
@@ -158,12 +169,20 @@ scene.add( pl);
 //Estos controles son para poder mirar alrededor, osea mover hacia donde esta viendo el jugador
 const pControls = new PointerLockControls(camera, document.body);
 
-var movementSpeed = 0.5;
-
+var movementSpeed = 40.0;
+var deltaTime;
 renderer.setAnimationLoop( animate );
+let lastTime = performance.now(); 
 
 function animate() {
-
+    
+    let currentTime = performance.now();
+    deltaTime = (currentTime - lastTime) / 1000; // En segundos
+    lastTime = currentTime;
+    if(deltaTime > 0.15)
+    {
+        deltaTime = 0.15;
+    }
     socket.on('Iniciar', (nombre) => {
       
         console.log('NombreJugador:'+nombre);
@@ -193,30 +212,102 @@ function animate() {
     renderer.render( scene, camera );
 }
 
+
+function isColliding(obj1_x, obj1_y, obj1_z, obj2_x, obj2_y, obj2_z, obj1_radius, obj2_radius)
+{
+    let distance = Math.sqrt(Math.pow(obj2_x - obj1_x, 2) + Math.pow(obj2_y - obj1_y, 2) + Math.pow(obj2_z - obj1_z, 2));
+    return (distance < (obj1_radius + obj2_radius));
+}
+
+function isWallColliding(point, cube)
+{
+    const { x: px, y: py, z: pz } = point;
+    const { x: cx, y: cy, z: cz, width, height, depth } = cube;
+
+    // Verificar si el punto está dentro de los límites del cubo
+    const inX = px >= cx && px <= cx + width;
+    const inY = py >= cy && py <= cy + height;
+    const inZ = pz >= cz && pz <= cz + depth;
+
+    // Si el punto está dentro de todas las dimensiones, hay colisión
+    return inX && inY && inZ;
+}
+
 $(document).ready(function() {
+    const sliders = [
+        { slider: "id-range-general", output: "id-general" },
+        { slider: "id-range-music", output: "id-music" },
+        { slider: "id-range-enemys", output: "id-enemys" }
+        ];
+
+        sliders.forEach(({ slider, output }) => {
+            const sliderElem = document.getElementById(slider);
+            const outputElem = document.getElementById(output);
+
+            // Mostrar valor inicial
+            outputElem.innerHTML = sliderElem.value;
+
+            // Actualizar valor en cada input
+            sliderElem.oninput = function () {
+                if(slider === "id-range-general")
+                {
+                    generalVolume = parseFloat(this.value) / 100;
+                }
+                if(slider === "id-range-music")
+                {
+                    musicVolume = parseFloat(this.value) / 100;
+                }
+                outputElem.innerHTML = this.value;
+                this.style.setProperty('--value', this.value + '%');
+                audio.volume = (1.0 * musicVolume) * generalVolume;
+            };
+
+            // Inicializar el color del camino recorrido
+            sliderElem.dispatchEvent(new Event('input'));
+        });
+
 
     $("#idBoton").click(iniciarConexion);
-
+    const audio = new Audio('loop.ogg');
+    audio.volume = 1.0; // Volumen entre 0.0 y 1.0
+    audio.loop = true; // Repetir sonido
+    audio.play()
+            .then(() => console.log("Reproduciendo..."))
+            .catch(err => console.error("Error al reproducir:", err));
     //Tengo que checar porque al conectar en tiempo real a ambos jugadores, todo se vuelve tan lento
     $(document).keypress(function(e){
 
         var tecla = e.key;
 
+        // Validar colisiones con paredes
+        //
+            const point = { x: camera.position.x, y: camera.position.y, z: camera.position.z }; // Coordenadas del punto
+            const cube = { x: -2.5, y: -3, z: 30, width: 5, height: 5, depth: 25};
+            if (isWallColliding(point, cube)) {
+                //console.log("El punto choca con el cubo. Px:" + point.x + " Pz: " + point.z);
+            }
+        //
+
         if( tecla == 'a' || tecla == 'A') {
-            camera.translateX(-movementSpeed);
+            console.log("x: " + point.x + " y: " + point.y + " z: " + point.z);
+            camera.translateX(-movementSpeed * deltaTime);
         }
 
         if( tecla == 'd' || tecla == 'D') {
-            camera.translateX(movementSpeed);
+            camera.translateX(movementSpeed  * deltaTime);
         }
 
         if( tecla == 's' || tecla == 'S') {
-            camera.translateZ(movementSpeed);
+            camera.translateZ(movementSpeed  * deltaTime);
         }
 
         if( tecla == 'w' || tecla == 'W') {
-            camera.translateZ(-movementSpeed);
+            camera.translateZ(-movementSpeed  * deltaTime);
         }
+        // Verificar si recoje algun objeto
+        //
+
+        //
 
         //Con el espacio activamos el poder mover la vista alrededor con el mouse
         //Para desactivarlo solo se presiona Esc

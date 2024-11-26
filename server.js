@@ -34,6 +34,10 @@ app.get('/main.js', (req, res) => {
     res.sendFile(join(__dirname, 'main.js'));
 });
 
+app.get('/loop.ogg', (req, res) => {
+  res.sendFile(join(__dirname, '/sound/loop.ogg'));
+});
+
 io.on('connection', (socket) => {
   console.log('a user connected');
 
