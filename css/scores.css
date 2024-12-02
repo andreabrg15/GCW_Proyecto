@@ -1,13 +1,99 @@
-#title {
-    color: #fff;
-    font-size: 2.5rem;
-    text-shadow: 3px 3px #2E073F, -2px -0px #E2BFD9 ;
-    margin-top: 8vh;
+#scores_table {
+    display: flex;
+    justify-content: center;
+    max-height: 44rem;
 }
 
-#first-place {
-    background-color: #8f891d;
-    border-radius: 10px;
-    margin-left: 50rem;
-    padding-right: 50rem;
+table{
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-block: 180px;
+}
+
+table .header-1{
+    width: 20vw;
+}
+
+table .header-2{
+    width: 20vw;
+}
+
+th{
+    background-color: #31023C;
+    color: white;
+    font-size: 20px;
+}
+
+td{
+    background-color: #d20cff;
+    font-size: 18px;
+    color: #31023C;
+}
+
+tr td{
+    transition: 100ms all;
+}
+
+tr:nth-child(even) td {
+    background-color: #e679ff;
+    color: #31023C;
+}
+
+tr:hover td{
+    background-color: #a90bcc;
+    color: #31023C;
+}
+
+tr:nth-child(even):hover td{
+    background-color: #ff7bde;
+    color: #31023C;
+}
+
+th, td{
+    padding-inline: 20px;
+    padding-block: 10px;
+}
+
+td:first-child,
+th:first-child {
+  border-radius: 30px 0 0 30px;
+}
+td:last-child,
+th:last-child {
+  border-radius: 0 30px 30px 0;
+}
+
+#id-back-btn
+{
+    text-decoration: none;
+    color: inherit;
+}
+
+#back-btn {
+    background-image: url('../imgs/boton.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 360px;
+    height: 80px;
+    justify-self: center;
+    position: absolute;
+    top: 87vh;
+    font-size: 30px;
+    color:white;
+}
+
+#back-btn:hover {
+    cursor: pointer;
+    scale: 1.05;
+    transition: ease-in-out;
+}
+
+#back-btn:active {
+    scale: 0.9;
+    transition: ease-in-out;
 }

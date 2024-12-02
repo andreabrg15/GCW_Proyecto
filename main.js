@@ -10,6 +10,7 @@ const socket = io();
 
 var objArdilla = new THREE.Object3D();
 var objArdilla2 = new THREE.Object3D();
+var niño = new THREE.Object3D();
 
 const manager = new THREE.LoadingManager();
 manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
@@ -110,11 +111,42 @@ function ModeloJugador2(pathModelo, name, posx, posy, posz, scale, angleY) {
     });
 }
 
+function ModeloNiño(pathModelo, name, posx, posy, posz, scale, angleY) {
+
+    const loader = new OBJLoader(manager);
+    var mtl = new MTLLoader(manager);
+
+    mtl.load('http://localhost:3000/'+pathModelo+'.mtl', function (materials) {
+        materials.preload();
+        loader.setMaterials(materials);
+
+        loader.load('http://localhost:3000/'+pathModelo+'.obj',
+            function (object) {
+
+                niño = object;
+                object.name = name;
+                object.position.x = posx;
+                object.position.y = posy;
+                object.position.z = posz;
+                object.scale.copy(new THREE.Vector3(scale, scale, scale));
+                if (angleY != null) {
+                    object.rotation.y = angleY * Math.PI / 180;
+                }
+                scene.add( object );
+        });
+
+        console.log(materials);
+    });
+}
+
 
 
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
 
 ModeloJugador2('models/ardilla2/ardilla', 'ardilla2', 0, 0, 5, 0.2, 180);
+
+//Niño que persigue a la ardilla (el jugador)
+ModeloNiño('models/niño/niño', 'niño', 10, -3, -10, 0.02);
 
 Modelos3D('models/1st/1st', '1st', 25, -3, 25, 2);
 Modelos3D('models/2nd/2nd', '2nd', -25, -3, 25, 2);
@@ -170,6 +202,7 @@ scene.add( pl);
 const pControls = new PointerLockControls(camera, document.body);
 
 var movementSpeed = 40.0;
+var movementKid = 20.0;
 var deltaTime;
 renderer.setAnimationLoop( animate );
 let lastTime = performance.now(); 
@@ -316,6 +349,10 @@ $(document).ready(function() {
         }
 
         socket.emit('Posicion',camera.position,nombreJugador1);
+
+        //Niño persigue a la ardilla
+        PerseguiralJugador();
+
     });
 
     function iniciarConexion(){
@@ -323,6 +360,24 @@ $(document).ready(function() {
         nombreJugador1=$("#idNombreJugador").val();
         socket.emit('Iniciar',nombreJugador1);
     
-      };
+    };
+
+    function PerseguiralJugador() {
+        if(niño.position.x > objArdilla.position.x) {
+            niño.translateX(-movementKid * deltaTime);
+        }
+
+        if(niño.position.x < objArdilla.position.x) {
+            niño.translateX(movementKid * deltaTime);
+        }
+
+        if(niño.position.z > objArdilla.position.z) {
+            niño.translateZ(-movementKid * deltaTime);
+        }
+
+        if(niño.position.z < objArdilla.position.z) {
+            niño.translateZ(movementKid * deltaTime);
+        }
+    }
     
  });
