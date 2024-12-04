@@ -300,7 +300,8 @@ $(document).ready(function() {
         });
 
 
-    $("#idBoton").click(iniciarConexion);
+    iniciarConexion();
+
     const audio = new Audio('loop.ogg');
     audio.volume = 1.0; // Volumen entre 0.0 y 1.0
     audio.loop = true; // Repetir sonido
@@ -357,7 +358,7 @@ $(document).ready(function() {
 
     function iniciarConexion(){
 
-        nombreJugador1=$("#idNombreJugador").val();
+        nombreJugador1 = sessionStorage.getItem('nombreUsuario');
         socket.emit('Iniciar',nombreJugador1);
     
     };

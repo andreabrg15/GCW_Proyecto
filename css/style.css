@@ -95,3 +95,43 @@ body {
 #user-btn {
     margin-left: 25px;
 }
+
+#choose {
+    background: url('../imgs/elegir.png') no-repeat center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: grid;
+    min-height: 100vh;
+}
+
+#choose-btns {
+    justify-self: center;
+    position: absolute;
+    top: 45vh;
+}
+
+#choose-btns div {
+    background-image: url('../imgs/boton.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 102px;
+    color: #fff;
+    font-size: 25px;
+}
+
+#choose-btns div:hover {
+    cursor: pointer;
+    scale: 1.05;
+    transition: ease-in-out;
+}
+
+#choose-btns div:active {
+    scale: 0.9;
+    transition: ease-in-out;
+}

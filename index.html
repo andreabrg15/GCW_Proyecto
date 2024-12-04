@@ -25,7 +25,9 @@
             <div class="row d-flex justify-content-center text-center align-items-center ">
                 <div id="home" class="col-10 justify-content-center text-center align-items-center" style="background-color: rgb(0, 0, 0);height: 40rem;">
                     <div id="start-btn">
-                        <a href="game" class="text-center" id="id-start-game"><h1 >Iniciar partida</h1></a>
+                        <a class="text-center" id="id-start-game" onclick="start()">
+                        <h1 >Iniciar partida</h1>
+                        </a>
                     </div>
                     <div id="secondary-btns">
                         <div id="config-btn">
@@ -34,14 +36,62 @@
                         <div id="scores-btn">
                             <a href="scores" class="text-center"><img src="./imgs/trophy.png" alt="scores"></a>
                         </div>
-                        <div id="user-btn">
-                            <img src="./imgs/character.png" alt="user">
-                        </div>
                     </div>
                 </div>
-                <div class="w-100 "></div>
             </div>
         </div>
     </main>
+    <script>
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1793786954807824',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v20.0'
+        });
+            
+        FB.AppEvents.logPageView();   
+            
+        };
+
+        FB.getLoginStatus(function(response) {   // See the onlogin handler
+            statusChangeCallback(response);
+        });
+
+        function checkLoginState() {               // Called when a person is finished with the Login Button.
+            FB.login(function(response) {
+                if(response.authResponse) {
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me', function(response) {
+                        console.log(response);
+                        alert('Bienvenido '+response.name);
+                        sessionStorage.setItem('nombreUsuario', response.name);
+                        window.location.href = 'chooseGame';
+                    });
+                } else {
+                    alert('Error en inicio de sesion');
+                }
+            }, {scope: 'public_profile, email'});
+        }
+
+        function start() {
+            if(confirm('¿Desea ingresar a traves de una red social?')) {
+                checkLoginState();
+            } else {
+                let nombre = prompt('Ingrese su nombre de usuario', 'jose123...');
+                alert('Bienvenido '+nombre);
+                sessionStorage.setItem('nombreUsuario', nombre);
+                window.location.href = 'chooseGame';
+            }
+        }
+    </script>
 </body>
 </html>

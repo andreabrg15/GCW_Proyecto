@@ -18,6 +18,10 @@ app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'index.html'));
 });
 
+app.get('/chooseGame', (req, res) => {
+  res.sendFile(join(__dirname, 'chooseGame.html'));
+});
+
 app.get('/game', (req, res) => {
     res.sendFile(join(__dirname, 'game.html'));
 });
