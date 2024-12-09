@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/gameOver.css">
 
     <!-- Import THREE JS -->
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -123,6 +124,25 @@
                             </div>
                         </div>
                     </div>
+
+
+
+                    <!-- Modal Perdiste -->
+<div class="modal fade" id="GameOverModal" tabindex="-1" aria-labelledby="GameOverModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mx-auto modal-title">¡Perdiste!</h5>
+        </div>
+        <div class="modal-body mx-auto d-flex flex-column">
+          <button type="button" class="btnShadow m-2 text-start" data-bs-dismiss="modal"><i class="fa-solid fa-x mx-2"></i>Salir</button>
+        </div>
+        <div class="modal-footer mx-auto">
+        </div>
+      </div>
+    </div>
+  </div>
+  
                     
                 </div>
                 <div class="w-100 "></div>
@@ -133,6 +153,12 @@
         </div>
     </main>
     <script>
+
+document.querySelector('#GameOverModal button:contains("Salir")').addEventListener('click', () => {
+  window.location.href = '/index.html'; 
+});
+
+
         const sliders = [
         { slider: "id-range-general", output: "id-general" },
         { slider: "id-range-music", output: "id-music" },

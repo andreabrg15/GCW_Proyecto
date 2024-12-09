@@ -1,0 +1,29 @@
+#GameOverModal .modal-content {
+    background-color: #410D5B;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  #GameOverModal .modal-header {
+    background-color: #2E073F;
+  }
+  
+  #GameOverModal .modal-title {
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  #GameOverModal .btnShadow {
+    background-color: #AD49E1;
+    color: #ffffff;
+    font-size: 1.50rem;
+    font-weight: bold;
+    box-shadow: 5px 5px #7A1CAC;
+  }
+  
+  #GameOverModal .btnShadow:hover {
+    color: #7A1CAC;
+    background-color: #ffffff;
+    box-shadow: 5px 5px #AD49E1;
+  }
+  
