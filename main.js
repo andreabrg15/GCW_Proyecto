@@ -11,6 +11,7 @@ const socket = io();
 var objArdilla = new THREE.Object3D();
 var objArdilla2 = new THREE.Object3D();
 var niño = new THREE.Object3D();
+const cajasDeColision = [];
 
 const manager = new THREE.LoadingManager();
 manager.onStart = function (url, itemsLoaded, itemsTotal) {
@@ -140,7 +141,27 @@ function ModeloNiño(pathModelo, name, posx, posy, posz, scale, angleY) {
     });
 }
 
-
+function CajasDeColisiones(escala, posicion) {
+    const geometria = new THREE.BoxGeometry(escala.x, escala.y, escala.z);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cubo = new THREE.Mesh(geometria, material);
+ 
+    cubo.position.set(posicion.x, posicion.y, posicion.z);
+ 
+    scene.add(cubo);
+    cubo.visible = false;
+    const boundingBox = new THREE.Box3().setFromObject(cubo);
+    //const boxHelper = new THREE.BoxHelper(cubo, 0xff0000);
+    //boxHelper.update();
+ 
+    cubo.boundingBox = boundingBox;
+    //cubo.boxHelper = boxHelper;
+ 
+    //scene.add(boxHelper);
+   
+    cajasDeColision.push(cubo);
+   
+}
 
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
 
@@ -320,6 +341,26 @@ var deltaTime;
 renderer.setAnimationLoop(animate);
 let lastTime = performance.now();
 
+CajasDeColisiones(new THREE.Vector3(3, 10, 100), new THREE.Vector3(52, 0, 0)); //pared derecha
+CajasDeColisiones(new THREE.Vector3(3, 10, 100), new THREE.Vector3(-52, 0, 0)); //pared izquierda
+CajasDeColisiones(new THREE.Vector3(110, 10, 3), new THREE.Vector3(0, 0, 52)); //pared abajo
+CajasDeColisiones(new THREE.Vector3(110, 10, 3), new THREE.Vector3(0, 0, -52)); //pared arriba
+ 
+CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, 12)); //arbusto 1
+CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, -12)); //arbusto 2
+CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, -39)); //arbusto
+CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, 39)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(12, 0, 0)); //arbusto 3
+CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(-12, 0, 0)); //arbusto 6
+CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(39, 0, 0)); //arbusto derecha
+CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(-39, 0, 0)); //arbusto izquierda
+CajasDeColisiones(new THREE.Vector3(4, 6, 20), new THREE.Vector3(37, 0, 25)); //arbusto
+CajasDeColisiones(new THREE.Vector3(4, 6, 20), new THREE.Vector3(13, 0, 25)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(-25, 0, 37)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(-25, 0, 12)); //arbusto
+CajasDeColisiones(new THREE.Vector3(8, 6, 20), new THREE.Vector3(-25, 0, -25)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(25, 0, -36)); //arbusto
+
 function animate() {
 
     let currentTime = performance.now();
@@ -420,7 +461,7 @@ $(document).ready(function () {
     $(document).keypress(function (e) {
 
         var tecla = e.key;
-
+        let ultimaPosicion = camera.position.clone();
         // Validar colisiones con paredes
         //
         const point = { x: camera.position.x, y: camera.position.y, z: camera.position.z }; // Coordenadas del punto
@@ -473,7 +514,14 @@ $(document).ready(function () {
                 camera.position.copy(ultimaPosicion);
             }
      
-
+            const playerPosition = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
+            for (const caja of cajasDeColision) {        
+                const isColliding = caja.boundingBox.containsPoint(playerPosition);
+           
+                if (isColliding) {
+                    camera.position.copy(ultimaPosicion);
+                }
+            }
 
     });
 
