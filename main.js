@@ -189,7 +189,7 @@ const scene = new THREE.Scene();
 //Estas dos lineas de abajo son para que la escena cargue dentro del div elegido
 const container = document.getElementById("game");
 const camera = new THREE.PerspectiveCamera( 60, container.offsetWidth / container.offsetHeight, 0.1, 2000);
- 
+camera.position.set(12, 0, 15);
 // CAMARA DESDE ARRIBA
 // camera.position.set(0, 100, 0);
 // camera.lookAt(0, 0, 0);
@@ -366,21 +366,29 @@ CajasDeColisiones(new THREE.Vector3(3, 10, 100), new THREE.Vector3(-52, 0, 0)); 
 CajasDeColisiones(new THREE.Vector3(110, 10, 3), new THREE.Vector3(0, 0, 52)); //pared abajo
 CajasDeColisiones(new THREE.Vector3(110, 10, 3), new THREE.Vector3(0, 0, -52)); //pared arriba
  
-CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, 12)); //arbusto 1
-CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, -12)); //arbusto 2
-CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, -39)); //arbusto
-CajasDeColisiones(new THREE.Vector3(3, 6, 20), new THREE.Vector3(0, 0, 39)); //arbusto
-CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(12, 0, 0)); //arbusto 3
-CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(-12, 0, 0)); //arbusto 6
-CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(39, 0, 0)); //arbusto derecha
-CajasDeColisiones(new THREE.Vector3(20, 6, 3), new THREE.Vector3(-39, 0, 0)); //arbusto izquierda
+CajasDeColisiones(new THREE.Vector3(3.5, 6, 20), new THREE.Vector3(0, 0, 12)); //arbusto 1
+CajasDeColisiones(new THREE.Vector3(3.5, 6, 20), new THREE.Vector3(0, 0, -12)); //arbusto 2
+CajasDeColisiones(new THREE.Vector3(3.5, 6, 20), new THREE.Vector3(0, 0, -39.2)); //arbusto
+CajasDeColisiones(new THREE.Vector3(3.5, 6, 20), new THREE.Vector3(0, 0, 40)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 3.5), new THREE.Vector3(12, 0, 0)); //arbusto 3
+CajasDeColisiones(new THREE.Vector3(20, 6, 3.5), new THREE.Vector3(-12, 0, 0)); //arbusto 6
+CajasDeColisiones(new THREE.Vector3(20, 6, 3.5), new THREE.Vector3(39.9, 0, 0)); //arbusto derecha
+CajasDeColisiones(new THREE.Vector3(20, 6, 3.5), new THREE.Vector3(-39.9, 0, 0)); //arbusto izquierda
 CajasDeColisiones(new THREE.Vector3(4, 6, 20), new THREE.Vector3(37, 0, 25)); //arbusto
 CajasDeColisiones(new THREE.Vector3(4, 6, 20), new THREE.Vector3(13, 0, 25)); //arbusto
 CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(-25, 0, 37)); //arbusto
-CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(-25, 0, 12)); //arbusto
+CajasDeColisiones(new THREE.Vector3(20, 6, 3.5), new THREE.Vector3(-25, 0, 13)); //arbusto
 CajasDeColisiones(new THREE.Vector3(8, 6, 20), new THREE.Vector3(-25, 0, -25)); //arbusto
 CajasDeColisiones(new THREE.Vector3(20, 6, 4), new THREE.Vector3(25, 0, -36)); //arbusto
- 
+CajasDeColisiones(new THREE.Vector3(1, 10, 6), new THREE.Vector3(-33.5, 1, 25)); //columpios
+CajasDeColisiones(new THREE.Vector3(1, 10, 6), new THREE.Vector3(-16.5, 1, 25)); //columpios
+CajasDeColisiones(new THREE.Vector3(2.5, 10, 1), new THREE.Vector3(-29, 1, 25)); //columpios
+CajasDeColisiones(new THREE.Vector3(2.5, 10, 1), new THREE.Vector3(-21, 1, 25)); //columpios
+CajasDeColisiones(new THREE.Vector3(8, 12, 7.8), new THREE.Vector3(25, 1, 25)); // MESA
+CajasDeColisiones(new THREE.Vector3(2, 40, 2), new THREE.Vector3(25, 1, -25)); //arbol1
+CajasDeColisiones(new THREE.Vector3(1, 40, 1), new THREE.Vector3(22, 1, -13.6)); //arbol2
+CajasDeColisiones(new THREE.Vector3(5, 40, 2), new THREE.Vector3(26, 1, -15)); //roca
+CajasDeColisiones(new THREE.Vector3(2, 40, 5.5), new THREE.Vector3(29, 1, -25)); //BANCA
  
 function animate() {
    
@@ -530,19 +538,12 @@ $(document).ready(function() {
         //     camera.position.copy(ultimaPosicion);
         // }
      
-      ////////////////// COLISIONES ////////////////////
-      if (isColliding(-20, 1, 25, camera.position.x, camera.position.y, camera.position.z, 10, 3) || //columpios
-        isColliding(25, 1, 24, camera.position.x, camera.position.y, camera.position.z, 4, 3) || //mesa
-        isColliding(25, 1, -24, camera.position.x, camera.position.y, camera.position.z, 3, 3) || //arbol1
-        isColliding(20, 1, -12, camera.position.x, camera.position.y, camera.position.z, 2, 3) || //arbol2
-        isColliding(23, 1, -12, camera.position.x, camera.position.y, camera.position.z, 2, 3) //roca
-      ) {
-        camera.position.copy(ultimaPosicion);
-      }
+     
+      
  
-      ////////////////// COLISIONES MUNDO ////////////////////
-      const playerPosition = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
-      for (const caja of cajasDeColision) {
+       ////////////////// COLISIONES MUNDO ////////////////////
+       const playerPosition = new THREE.Vector3(camera.position.x, camera.position.y-3, camera.position.z-5);
+       for (const caja of cajasDeColision) {
         const isColliding = caja.boundingBox.containsPoint(playerPosition);
  
         if (isColliding) {
