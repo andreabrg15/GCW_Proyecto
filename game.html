@@ -135,7 +135,7 @@
           <h5 class="mx-auto modal-title">¡Perdiste!</h5>
         </div>
         <div class="modal-body mx-auto d-flex flex-column">
-          <button type="button" class="btnShadow m-2 text-start" data-bs-dismiss="modal"><i class="fa-solid fa-x mx-2"></i>Salir</button>
+          <button type="button" id="loseGame" class="btnShadow m-2 text-start" data-bs-dismiss="modal"><i class="fa-solid fa-x mx-2"></i>Salir</button>
         </div>
         <div class="modal-footer mx-auto">
         </div>
@@ -154,8 +154,8 @@
     </main>
     <script>
 
-document.querySelector('#GameOverModal button:contains("Salir")').addEventListener('click', () => {
-  window.location.href = '/index.html'; 
+document.querySelector('#loseGame').addEventListener('click', () => {
+  window.location.href = '/'; 
 });
 
 

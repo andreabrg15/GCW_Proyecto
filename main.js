@@ -11,6 +11,8 @@ const socket = io();
 var objArdilla = new THREE.Object3D();
 var objArdilla2 = new THREE.Object3D();
 var niño = new THREE.Object3D();
+const players = sessionStorage.getItem('players');
+const difficulty = sessionStorage.getItem('mode');
 const cajasDeColision = [];
  
 const manager = new THREE.LoadingManager();
@@ -161,7 +163,7 @@ function CajasDeColisiones(escala, posicion) {
  
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
  
- 
+if(players == '2') 
 ModeloJugador2('models/ardilla2/ardilla', 'ardilla2', 0, 0, 5, 0.2, 180);
  
 //Niño que persigue a la ardilla (el jugador)
@@ -355,7 +357,12 @@ if (scenario) {
 const pControls = new PointerLockControls(camera, document.body);
  
 var movementSpeed = 40.0;
-var movementKid = 20.0;
+var movementKid = 0;
+if(difficulty == 'easy') {
+    movementKid = 18.0;
+} else {
+    movementKid = 27.0;
+}
 var deltaTime;
 renderer.setAnimationLoop( animate );
 let lastTime = performance.now();
@@ -401,7 +408,7 @@ function animate() {
     }
     socket.on('Iniciar', (nombre) => {
      
-        // console.log('NombreJugador:'+nombre);
+        console.log('NombreJugador:'+nombre);
         if(nombre != nombreJugador1){
           nombreJugador2 = nombre;
         }
@@ -410,7 +417,7 @@ function animate() {
     });
  
     socket.on('Posicion', (position,nombre) => {
-        // console.log('NombreJugador:'+nombre+' posicion x:'+position.x);
+        console.log('NombreJugador:'+nombre+' posicion x:'+position.x);
         if(nombre == nombreJugador1){
           objArdilla.position.set(position.x,position.y-3,position.z-5);
  
@@ -421,7 +428,11 @@ function animate() {
         }
        
     });
- 
+
+    if(players == '1') 
+    objArdilla.position.set(camera.position.x,camera.position.y-3,camera.position.z-5);
+
+    if(pl)
     pl.position.set(objArdilla.x, objArdilla.y + 2, objArdilla.z);
  
     renderer.render( scene, camera );
@@ -481,7 +492,7 @@ $(document).ready(function() {
             sliderElem.dispatchEvent(new Event('input'));
         });
  
- 
+    if(players == '2') 
     iniciarConexion();
  
     const audio = new Audio('loop.ogg');
@@ -524,6 +535,7 @@ $(document).ready(function() {
             pControls.lock();
         }
  
+        if(players == '2') 
         socket.emit('Posicion',camera.position,nombreJugador1);
  
         //Niño persigue a la ardilla

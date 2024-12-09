@@ -45,19 +45,20 @@ app.get('/loop.ogg', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('Iniciar', (nombre) => {
+  socket.on('Iniciar', (nombre/* , personaje */) => {
     console.log('Nuevo jugador: '+nombre);
 
   listaJugadores.push( {
     name:nombre,
     x:0,
     y:0,
-    z:0
+    z:0/* ,
+    character:personaje */
   });
   
   for(let item of listaJugadores){
     
-   io.emit('Iniciar',item.name);
+   io.emit('Iniciar',item.name/* , item.character */);
 
   }
 
