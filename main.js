@@ -16,6 +16,8 @@ var objArdilla2 = new THREE.Object3D();
 var niño = new THREE.Object3D();
 let boxNiño = new THREE.Box3().setFromObject(niño);
 let boxArdilla = new THREE.Box3().setFromObject(objArdilla);
+const players = sessionStorage.getItem('players');
+const difficulty = sessionStorage.getItem('mode');
 const cajasDeColision = [];
 var cajasDeColisionBellotas = [];
  
@@ -201,7 +203,7 @@ function bellotas(name, posx, posy, posz, scale){
  
 ModeloJugador1('models/ardilla/ardilla', 'ardilla', 0, 0, 5, 0.2, 180);
  
- 
+if(players == '2') 
 ModeloJugador2('models/ardilla2/ardilla', 'ardilla2', 0, 0, 5, 0.2, 180);
  
 //Niño que persigue a la ardilla (el jugador)
@@ -460,11 +462,11 @@ var movementKid = 0;
 const dificultad = sessionStorage.getItem("mode");
 if (dificultad == "easy") {
   var movementSpeed = 40.0;
-  var movementKid = 20.0;
+  var movementKid = 18.0;
 }
 else if (dificultad == "hard") {
-  var movementSpeed = 38.0;
-  var movementKid = 25.0;
+  var movementSpeed = 40.0;
+  var movementKid = 27.0;
 }
 else {
   console.log("error. falta escoger el modo de juego")
@@ -542,13 +544,19 @@ function animate() {
   if (deltaTime > 0.15) {
     deltaTime = 0.15;
   }
-  socket.on('Iniciar', (nombre) => {
+  // socket.on('Iniciar', (nombre) => {
  
-    // console.log('NombreJugador:'+nombre);
-    if (nombre != nombreJugador1) {
-      nombreJugador2 = nombre;
-    }
-  });
+  //   // console.log('NombreJugador:'+nombre);
+  //   if (nombre != nombreJugador1) {
+  //     nombreJugador2 = nombre;
+  //   }
+  //   socket.on('Iniciar', (nombre) => {
+     
+  //       console.log('NombreJugador:'+nombre);
+  //       if(nombre != nombreJugador1){
+  //         nombreJugador2 = nombre;
+  //       }
+       
  
   if (howManyPlayers == "1") {
     socket.on('Posicion', (position, nombre, rotation) => {
@@ -559,12 +567,17 @@ function animate() {
         //orbitarArdilla(camera.position.x, camera.position.y, camera.position.z, camera.rotation.y);
       }
  
-      if (nombre == nombreJugador2) {
-        objArdilla2.position.set(position.x, position.y - 3, position.z - 5);
-      }
+    // socket.on('Posicion', (position,nombre) => {
+    //     console.log('NombreJugador:'+nombre+' posicion x:'+position.x);
+    //     if(nombre == nombreJugador1){
+    //       objArdilla.position.set(position.x,position.y-3,position.z-5);
  
     });
- 
+
+    if(players == '1') 
+    objArdilla.position.set(camera.position.x,camera.position.y-3,camera.position.z-5);
+
+    if(pl)
     pl.position.set(objArdilla.x, objArdilla.y + 2, objArdilla.z);
   }
   // else if(howManyPlayers == "2"){
@@ -585,7 +598,7 @@ function animate() {
   //else {
   //     console.log("No hay colisión.");
   // }
-if(howManyPlayers == "2")
+if(howManyPlayers == "2"){
   for (const caja of cajasDeColisionBellotas) {
     const isCollidingArdilla = caja.boundingBox.containsPoint(objArdilla.position);
  
@@ -596,6 +609,7 @@ if(howManyPlayers == "2")
       console.log(puntuacion);
     }
   }
+}
   else if (howManyPlayers == "1"){
     for (const caja of cajasDeColisionBellotas) {
       const isCollidingArdilla = caja.boundingBox.containsPoint(camera.position);
@@ -680,8 +694,8 @@ $(document).ready(function () {
     sliderElem.dispatchEvent(new Event('input'));
   });
  
- 
-  iniciarConexion();
+    if(players == '2') 
+    iniciarConexion();
  
   const audio = new Audio('loop.ogg');
   audio.volume = 1.0; // Volumen entre 0.0 y 1.0
@@ -721,8 +735,8 @@ $(document).ready(function () {
         camera.rotation.y -= rotationSpeed; // Rotar hacia la derecha
       }
  
-      // Verificar si recoje algun objeto
-      //
+        if(players == '2') 
+        socket.emit('Posicion',camera.position,nombreJugador1);
  
       //
  
