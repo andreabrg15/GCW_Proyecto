@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/gameOver.css">
+    <link rel="stylesheet" href="css/win.css">
 
     <!-- Import THREE JS -->
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -135,7 +136,7 @@
           <h5 class="mx-auto modal-title">¡Perdiste!</h5>
         </div>
         <div class="modal-body mx-auto d-flex flex-column">
-          <button type="button" class="btnShadow m-2 text-start" data-bs-dismiss="modal"><i class="fa-solid fa-x mx-2"></i>Salir</button>
+          <button type="button" class="btnShadow m-2 text-start" data-bs-dismiss="modal" onclick="redirectToHome()"><i class="fa-solid fa-x mx-2"></i>Salir</button>
         </div>
         <div class="modal-footer mx-auto">
         </div>
@@ -143,6 +144,28 @@
     </div>
   </div>
   
+ <!-- Modal Ganaste -->
+ <div class="modal fade" id="WinModal" tabindex="-1" aria-labelledby="WinModalLabel"
+ aria-hidden="true">
+ <div class="modal-dialog modal-lg modal-dialog-centered">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h5 class="mx-auto modal-title">¡Ganaste!</h5>
+         </div>
+         <div
+             class="modal-body mx-auto d-flex flex-column justify-content-center align-items-center">
+             <h2 class="win-message">¡Felicidades!</h2>
+             <button type="button" class="btnShadow m-2 text-start" data-bs-dismiss="modal"
+                 onclick="redirectToHome()">
+                 <i class="fa-solid fa-x mx-2"></i>Salir
+             </button>
+         </div>
+         <div class="modal-footer mx-auto">
+         </div>
+     </div>
+ </div>
+</div>
+
                     
                 </div>
                 <div class="w-100 "></div>
@@ -154,9 +177,9 @@
     </main>
     <script>
 
-document.querySelector('#GameOverModal button:contains("Salir")').addEventListener('click', () => {
-  window.location.href = '/index.html'; 
-});
+function redirectToHome() {    
+     window.location.href = '/'; 
+}
 
 
         const sliders = [
